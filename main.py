@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 import argparse
+from prompts import system_prompt
 
 #User input using argparse#
 
@@ -32,8 +33,10 @@ response = client.models.generate_content(
     model='gemini-2.5-flash', 
     contents= messages,
     config= types.GenerateContentConfig(
-        max_output_tokens= 3000,
-    ) 
+        system_instruction = system_prompt,
+        max_output_tokens = 3000,
+        temperature = 0
+        ) 
 )
 if response.usage_metadata == None:
     raise RuntimeError ("metadata not available")
