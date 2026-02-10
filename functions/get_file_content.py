@@ -1,5 +1,6 @@
 import os
-
+from google import genai 
+from google.genai import types
 from config import char_limit
 
 
@@ -20,3 +21,20 @@ def get_file_content(working_directory, file_path):
         return content
     except Exception as e:
         return f'Error reading file "{file_path}": {e}'
+    
+## SCHEMA FOR THE GET FILES INFO FUNC FOR LLM CALL ##
+    
+schema_get_file_content = types.FunctionDeclaration(
+    name="get_file_content",
+    description=f"Retrieves the content (at most {char_limit} characters) of a specified file within the working directory",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "file_path": types.Schema(
+                type=types.Type.STRING,
+                description="Path to the file to read, relative to the working directory",
+            ),
+        },
+        required=["file_path"],
+    ),
+)
